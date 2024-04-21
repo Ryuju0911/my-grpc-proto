@@ -349,9 +349,9 @@ paths:
             $ref: '#/definitions/bankCurrentBalanceRequest'
       tags:
         - BankService
-  /bank.BankService/SummarizeTransaction:
+  /bank.BankService/SummarizeTransactions:
     post:
-      operationId: BankService_SummarizeTransaction
+      operationId: BankService_SummarizeTransactions
       responses:
         "200":
           description: A successful response.

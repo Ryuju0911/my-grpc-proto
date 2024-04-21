@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	BankService_GetCurrentBalance_FullMethodName    = "/bank.BankService/GetCurrentBalance"
-	BankService_FetchExchangeRates_FullMethodName   = "/bank.BankService/FetchExchangeRates"
-	BankService_SummarizeTransaction_FullMethodName = "/bank.BankService/SummarizeTransaction"
-	BankService_TransferMultiple_FullMethodName     = "/bank.BankService/TransferMultiple"
-	BankService_CreateAccount_FullMethodName        = "/bank.BankService/CreateAccount"
+	BankService_GetCurrentBalance_FullMethodName     = "/bank.BankService/GetCurrentBalance"
+	BankService_FetchExchangeRates_FullMethodName    = "/bank.BankService/FetchExchangeRates"
+	BankService_SummarizeTransactions_FullMethodName = "/bank.BankService/SummarizeTransactions"
+	BankService_TransferMultiple_FullMethodName      = "/bank.BankService/TransferMultiple"
+	BankService_CreateAccount_FullMethodName         = "/bank.BankService/CreateAccount"
 )
 
 // BankServiceClient is the client API for BankService service.
@@ -32,7 +32,7 @@ const (
 type BankServiceClient interface {
 	GetCurrentBalance(ctx context.Context, in *CurrentBalanceRequest, opts ...grpc.CallOption) (*CurrentBalanceResponse, error)
 	FetchExchangeRates(ctx context.Context, in *ExchangeRateRequest, opts ...grpc.CallOption) (BankService_FetchExchangeRatesClient, error)
-	SummarizeTransaction(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionClient, error)
+	SummarizeTransactions(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionsClient, error)
 	TransferMultiple(ctx context.Context, opts ...grpc.CallOption) (BankService_TransferMultipleClient, error)
 	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
 }
@@ -86,30 +86,30 @@ func (x *bankServiceFetchExchangeRatesClient) Recv() (*ExchangeRateResponse, err
 	return m, nil
 }
 
-func (c *bankServiceClient) SummarizeTransaction(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &BankService_ServiceDesc.Streams[1], BankService_SummarizeTransaction_FullMethodName, opts...)
+func (c *bankServiceClient) SummarizeTransactions(ctx context.Context, opts ...grpc.CallOption) (BankService_SummarizeTransactionsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BankService_ServiceDesc.Streams[1], BankService_SummarizeTransactions_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bankServiceSummarizeTransactionClient{stream}
+	x := &bankServiceSummarizeTransactionsClient{stream}
 	return x, nil
 }
 
-type BankService_SummarizeTransactionClient interface {
+type BankService_SummarizeTransactionsClient interface {
 	Send(*Transaction) error
 	CloseAndRecv() (*TransactionSummary, error)
 	grpc.ClientStream
 }
 
-type bankServiceSummarizeTransactionClient struct {
+type bankServiceSummarizeTransactionsClient struct {
 	grpc.ClientStream
 }
 
-func (x *bankServiceSummarizeTransactionClient) Send(m *Transaction) error {
+func (x *bankServiceSummarizeTransactionsClient) Send(m *Transaction) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *bankServiceSummarizeTransactionClient) CloseAndRecv() (*TransactionSummary, error) {
+func (x *bankServiceSummarizeTransactionsClient) CloseAndRecv() (*TransactionSummary, error) {
 	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
@@ -166,7 +166,7 @@ func (c *bankServiceClient) CreateAccount(ctx context.Context, in *CreateAccount
 type BankServiceServer interface {
 	GetCurrentBalance(context.Context, *CurrentBalanceRequest) (*CurrentBalanceResponse, error)
 	FetchExchangeRates(*ExchangeRateRequest, BankService_FetchExchangeRatesServer) error
-	SummarizeTransaction(BankService_SummarizeTransactionServer) error
+	SummarizeTransactions(BankService_SummarizeTransactionsServer) error
 	TransferMultiple(BankService_TransferMultipleServer) error
 	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
 	mustEmbedUnimplementedBankServiceServer()
@@ -182,8 +182,8 @@ func (UnimplementedBankServiceServer) GetCurrentBalance(context.Context, *Curren
 func (UnimplementedBankServiceServer) FetchExchangeRates(*ExchangeRateRequest, BankService_FetchExchangeRatesServer) error {
 	return status.Errorf(codes.Unimplemented, "method FetchExchangeRates not implemented")
 }
-func (UnimplementedBankServiceServer) SummarizeTransaction(BankService_SummarizeTransactionServer) error {
-	return status.Errorf(codes.Unimplemented, "method SummarizeTransaction not implemented")
+func (UnimplementedBankServiceServer) SummarizeTransactions(BankService_SummarizeTransactionsServer) error {
+	return status.Errorf(codes.Unimplemented, "method SummarizeTransactions not implemented")
 }
 func (UnimplementedBankServiceServer) TransferMultiple(BankService_TransferMultipleServer) error {
 	return status.Errorf(codes.Unimplemented, "method TransferMultiple not implemented")
@@ -243,25 +243,25 @@ func (x *bankServiceFetchExchangeRatesServer) Send(m *ExchangeRateResponse) erro
 	return x.ServerStream.SendMsg(m)
 }
 
-func _BankService_SummarizeTransaction_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(BankServiceServer).SummarizeTransaction(&bankServiceSummarizeTransactionServer{stream})
+func _BankService_SummarizeTransactions_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(BankServiceServer).SummarizeTransactions(&bankServiceSummarizeTransactionsServer{stream})
 }
 
-type BankService_SummarizeTransactionServer interface {
+type BankService_SummarizeTransactionsServer interface {
 	SendAndClose(*TransactionSummary) error
 	Recv() (*Transaction, error)
 	grpc.ServerStream
 }
 
-type bankServiceSummarizeTransactionServer struct {
+type bankServiceSummarizeTransactionsServer struct {
 	grpc.ServerStream
 }
 
-func (x *bankServiceSummarizeTransactionServer) SendAndClose(m *TransactionSummary) error {
+func (x *bankServiceSummarizeTransactionsServer) SendAndClose(m *TransactionSummary) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *bankServiceSummarizeTransactionServer) Recv() (*Transaction, error) {
+func (x *bankServiceSummarizeTransactionsServer) Recv() (*Transaction, error) {
 	m := new(Transaction)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -336,8 +336,8 @@ var BankService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 		{
-			StreamName:    "SummarizeTransaction",
-			Handler:       _BankService_SummarizeTransaction_Handler,
+			StreamName:    "SummarizeTransactions",
+			Handler:       _BankService_SummarizeTransactions_Handler,
 			ClientStreams: true,
 		},
 		{
