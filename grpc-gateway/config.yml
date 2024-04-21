@@ -3,3 +3,16 @@ config_version: 3
 
 http:
   rules:
+    - selector: bank.BankService.GetCurrentBalance
+      get: /bank/v1/account/current_balance
+    - selector: bank.BankService.FetchExchangeRates
+      get: /bank/v1/exchange_rates
+    - selector: bank.BankService.SummarizeTransactions
+      get: /bank/v1/transaction/summarize
+      body: "*"
+    - selector: bank.BankService.GetCurrentBalance
+      get: /bank/v1/transaction/transfer_multiple
+      body: "*"
+    - selector: bank.BankService.CreateAccount
+      get: /bank/v1/account
+      body: "*"
