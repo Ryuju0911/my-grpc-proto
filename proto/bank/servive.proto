@@ -16,7 +16,7 @@ service BankService {
   rpc FetchExchangeRates(ExchangeRateRequest)
     returns (stream ExchangeRateResponse) {}
   
-  rpc SummarizeTransaction(stream Transaction)
+  rpc SummarizeTransactions(stream Transaction)
     returns (TransactionSummary) {}
 
   rpc TransferMultiple(stream TransferRequest)
